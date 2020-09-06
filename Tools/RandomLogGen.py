@@ -4,12 +4,12 @@ import csv
 import sys
 import datetime
 
-majorPlaces = ["place1", "place2", "place3"]
-minorPlaces = {
-    "place1": ["m1place1", "m2place1", "m3place1"],
-    "place2": ["m1place2", "m2place2", "m3place2"],
-    "place3": ["m1place3", "m2place3", "m3place3"],
-}
+# majorPlaces = ["place1", "place2", "place3"]
+# minorPlaces = {
+#     "place1": ["m1place1", "m2place1", "m3place1"],
+#     "place2": ["m1place2", "m2place2", "m3place2"],
+#     "place3": ["m1place3", "m2place3", "m3place3"],
+# }
 
 sym = ["|", "/", "-", "\\"]
 ind = 0
@@ -42,8 +42,8 @@ with open(srcPath, "r", newline = "") as srcFile, open(dstPath, "w", newline = "
         
         for _ in range(count):
             #generate place
-            majorPlace = random.choice(majorPlaces)
-            minorPlace = random.choice(minorPlaces[majorPlace])
+            majorPlace = random.randint(10000,15000)
+            minorPlace = random.randint(1,100)
 
             #generate time
             time = str(random.randrange(7, 24)) + ":" + random.choice(["00", "30"])
