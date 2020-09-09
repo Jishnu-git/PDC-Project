@@ -15,8 +15,9 @@ sym = ["|", "/", "-", "\\"]
 ind = 0
 totEntries = 0
 
-srcPath = os.path.realpath(os.path.join(__file__, os.path.relpath("Data", start = __file__), "Names.csv"))
-dstPath = os.path.realpath(os.path.join(__file__, os.path.relpath("Data", start = __file__), "Logs.csv"))
+cur_loc = os.path.dirname(__file__)
+srcPath = os.path.realpath(os.path.join(cur_loc, "..", "Data", "Names.csv"))
+dstPath = os.path.realpath(os.path.join(cur_loc, "..", "Data", "Logs.csv"))
 
 if not os.path.exists(srcPath):
     sys.stderr.write("Names.csv file not found in Data folder, generate one using RandomNameGen.py\nExiting...");
@@ -27,7 +28,7 @@ with open(srcPath, "r", newline = "") as srcFile, open(dstPath, "w", newline = "
     names = list(csv.DictReader(srcFile)) 
     logs = csv.writer(dstFile)
 
-    logs.writerow(["ID", "First Name", "Last Name", "Location", "Place", "Date", "Time", "Contact"])
+    logs.writerow(["ID", "First Name", "Last Name", "Area Code", "Location Code", "Date", "Time", "Contact"])
     for i, person in enumerate(names):
         if "count" not in person.keys():
             names[i]["count"] = 0

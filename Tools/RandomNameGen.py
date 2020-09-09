@@ -14,7 +14,7 @@ if n <= 0:
     sys.stderr.flush()
     exit(0)
 
-path = os.path.realpath(os.path.join(__file__, os.path.relpath("Data", start = __file__), "Names.csv"))
+path = os.path.realpath(os.path.join(os.path.dirname(__file__), "..", "Data", "Names.csv"))
 with open(path, "w", newline = "") as file:
     data = csv.writer(file)
     data.writerow(["ID", "First Name", "Last Name", "Infection Status"])
