@@ -4,13 +4,6 @@ import csv
 import sys
 import datetime
 
-# majorPlaces = ["place1", "place2", "place3"]
-# minorPlaces = {
-#     "place1": ["m1place1", "m2place1", "m3place1"],
-#     "place2": ["m1place2", "m2place2", "m3place2"],
-#     "place3": ["m1place3", "m2place3", "m3place3"],
-# }
-
 sym = ["|", "/", "-", "\\"]
 ind = 0
 totEntries = 0
