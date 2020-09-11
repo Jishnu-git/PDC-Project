@@ -10,17 +10,20 @@ class Time {
     string time;
     string location;
     string places;
+    string contacts;
 
     public:
-    void setDetails(string time,string location, string place){
+    void setDetails(string contacts, string time,string location, string place){
         this->time = time;
         this->location = location;
         this->places = place;
+        this->contacts = contacts;
     }
     void getDetails(){
-        cout<<"Time: "<<time<<'\n';
-        cout<<"Location: "<<location<<'\n';
-        cout<<"Place: "<<places<<'\n';
+        cout<<"Time: "<<time<<' ';
+        cout<<"Location: "<<location<<' ';
+        cout<<"Place: "<<places<<' ';
+        cout<<"Contacts: "<<contacts<<' ';
     }
 };
 class Dates {
@@ -34,7 +37,7 @@ class Dates {
     }
     void getDetails(){
         list<Time> :: iterator it;
-        cout<<"Date: "<<Date<<'\n';
+        cout<<"\nDate: "<<Date<<' ';
         for(it = times.begin(); it != times.end(); ++it){
             (*it).getDetails();
         }
@@ -76,11 +79,21 @@ class Person {
             (*it).getDetails();
         }
     }
+    
+    void getDetails(string date){
+        list<Dates> :: iterator it;
+        for(it = dates.begin(); it != dates.end(); ++it){
+            if((*it).getDate() == date){
+                (*it).getDetails();
+                break;
+            }
+        }
+    }
 };
 int main(){
-    Person p[10001];
+    Person p[1001];
     fstream f;
-    string line,word,temp;
+    string line,word;
     f.open("D:/Projects/PDC-Project/Data/Names.csv",ios::in);
     vector <string> row;
     if(!f){
@@ -95,40 +108,41 @@ int main(){
   
         while (getline(s, word, ',') && count>1) { 
             row.push_back(word); 
-            int id;
-            try
-            {
+        }
+        int id;
+        if(count>1){
+            try{
                 id = stoi(row[0]);
             }
-            catch(const std::exception& e)
-            {
+            catch(const std::exception& e){
                 std::cerr << e.what() <<" "<<row[0] <<'\n';
                 break;
             }
             p[id].setDetails(id,row[1],row[2]);
-            //cout<<word<<" ";
         }
-        //cout<<'\n';
-        // cout<<row<<'\n';
     }
     f.close();
     count = 0;
-    cout<<"Finished 1";
     fstream f1;
     f1.open("D:/Projects/PDC-Project/Data/Logs.csv",ios::in);
-    while (f1 >> temp) { 
+    while (!f1.eof()) { 
         count++;
         Time t;
         Dates d;
   
         row.clear(); 
         getline(f1, line); 
-  
-        cout<<line;
         stringstream s(line); 
         while (getline(s, word, ',')&&count > 1) { 
             row.push_back(word); 
-            t.setDetails(row[6],row[3],row[4]);
+        }
+        if(count > 1){
+            int it = 7;
+            string contacts="";
+            while(it < row.size()){
+                contacts += row[it++];
+            }
+            t.setDetails(contacts,row[6],row[3],row[4]);
             d.setDetails(row[5],t);
             try
             {
@@ -139,10 +153,16 @@ int main(){
                 std::cerr << e.what() << '\n';
                 break;
             }
-            cout<<row[0]<<'\n';
         }
     }
     f1.close();
-    p[1].getDetails();
+    int id;
+    string date;
+    cout<<"Enter the ID of the person to be searched: ";
+    cin>>id;
+    p[id].getDetails();
+    cout<<"\n\nEnter the ID of the person and the date (yyyy-mm-dd) to be searched: ";
+    cin>>id>>date;
+    p[id].getDetails(date);
     return 0;
 }
