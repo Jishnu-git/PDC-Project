@@ -5,17 +5,18 @@
 #include <sstream>
 #include <iostream>
 #include <algorithm>
+#include <ctime>
 
 using namespace std;
 
 class Person {
-    int id;
+    long long id;
     string fname;
     string lname;
     bool infected;
 
 public:
-    Person(int id, std::string fname, std::string lname, bool infected):
+    Person(long long id, std::string fname, std::string lname, bool infected):
         id(id), fname(fname), lname(lname), infected(infected)
         {}
 
@@ -31,12 +32,12 @@ public:
         return lname;
     }
 
-    int getID() {
+    long long getID() {
         return id;
     }
 };
 
-map<long, vector<long>> Graph;
+map<long long, vector<long long>> Graph;
 vector<Person> People;
 
 void makeGraph() {
@@ -47,7 +48,8 @@ void makeGraph() {
     vector<string> row;
     string line, word;
     getline(logs, line);
-    long count = 0;
+    long long count = 0;
+    clock_t timer = clock();
     while(!logs.eof()) {
         row.clear();
         getline(logs, line);
@@ -60,8 +62,8 @@ void makeGraph() {
             row.push_back(word);
         }
 
-        long id = stol(row[0]);
-        vector<long> contacts;
+        long long id = stoll(row[0]);
+        vector<long long> contacts;
         if (Graph.find(id) != Graph.end()) {
             contacts = Graph[id];
         }
@@ -69,22 +71,28 @@ void makeGraph() {
         if (row[7].compare("None") != 0) {
             int i = 7, n = row.size();
             if (i == n - 1) {
-                contacts.push_back(stol(row[i]));
+                contacts.push_back(stoll(row[i]));
             } else {
                 for (;i < n - 1; i++) {
-                    contacts.push_back(stol(row[i].substr(1)));
+                    contacts.push_back(stoll(row[i].substr(1)));
                 }
-                contacts.push_back(stol(row[n - 1].substr(0, n - 1)));
+                contacts.push_back(stoll(row[n - 1].substr(0, n - 1)));
             }
             
         }
 
-        vector<long>::iterator len = unique(contacts.begin(), contacts.end());
+        vector<long long>::iterator len = unique(contacts.begin(), contacts.end());
         contacts.resize(distance(contacts.begin(), len));
-        cout << "\rReading Logs.csv: " << ++count << " entries processed...";
-        cout.flush();
+        if ((float)(clock() - timer) / CLOCKS_PER_SEC >= 0.1) {
+            cout << "\rReading Logs.csv: " << count << " entries processed...";
+            cout.flush();
+            timer = clock();
+        }
+        count++;        
         Graph[id] = contacts;
     }
+    cout << "\rReading Logs.csv: " << count << " entries processed...";
+    cout.flush();
     cout << "\nReading Logs.csv: Done" << endl;
     logs.close();
 }
@@ -97,6 +105,7 @@ void readNames() {
     vector<string> row;
     string line, word;
     getline(names, line);
+    clock_t timer = clock();
     while (!names.eof()) {
         row.clear();
         getline(names, line);
@@ -117,11 +126,16 @@ void readNames() {
         } else {
             status = -1;
         }
-        
-        cout << "\rReading Names.csv: " << row[0] << " entries processed...";
-        cout.flush();
-        People.push_back(Person(stol(row[0]), row[1], row[2], status));
+
+        if ((float)(clock() - timer) / CLOCKS_PER_SEC >= 0.1) {
+            cout << "\rReading Names.csv: " << row[0] << " entries processed...";
+            cout.flush();
+            timer = clock();
+        }
+        People.push_back(Person(stoll(row[0]), row[1], row[2], status));
     }
+    cout << "\rReading Names.csv: " << row[0] << " entries processed...";
+    cout.flush();
 
     cout << "\nReading Names.csv: Done" << endl;
 
