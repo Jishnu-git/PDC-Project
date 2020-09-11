@@ -51,8 +51,8 @@ with open(srcPath, "r", newline = "") as srcFile, open(dstPath, "w", newline = "
             else:
                 contacts = "None"
             
-            if contacts != "None" and i in contacts:
-                contacts.remove(i)
+            if contacts != "None" and i + 1 in contacts:
+                contacts.remove(i + 1)
 
             contactList = contacts
             if contacts != "None":
@@ -66,7 +66,10 @@ with open(srcPath, "r", newline = "") as srcFile, open(dstPath, "w", newline = "
 
             #write activity of people involved
             for contact in contactList:
-                logs.writerow([names[contact - 1]["ID"], names[contact - 1]["First Name"], names[contact - 1]["Last Name"], majorPlace, minorPlace,date, time, contacts.replace(str(contact), str(i + 1))])
+                cListCopy = contactList.copy()
+                cListCopy.remove(contact)
+                cListCopy.append(i + 1)
+                logs.writerow([names[contact - 1]["ID"], names[contact - 1]["First Name"], names[contact - 1]["Last Name"], majorPlace, minorPlace,date, time, ", ".join([str(cnt) for cnt in cListCopy])])
                 totEntries += 1 
                 if "count" not in names[contact - 1].keys():
                     names[contact - 1]["count"] = 1
