@@ -1,12 +1,14 @@
-#include "ParseGraph.hxx"
-
+//#include "ParseGraph.hxx"
+#include "PersonTree.hxx"
 using namespace std;
 
 int main(void) {
-    readNames();
-    makeGraph();
-    for (vector<long long>::iterator i = Graph[4].begin(); i != Graph[4].end(); i++) {
-        cout << *i << endl;
+    CreateGraph();
+    //loc_display();
+    vector<pair<string,vector<string>>> l = p[2].getDateRange("2020-08-15",5);
+    for (vector<pair<string,vector<string>>>::iterator i = l.begin(); i != l.end(); i++){
+        cout<<(*i).first<<" ";
     }
+    
     return 0;
 }
