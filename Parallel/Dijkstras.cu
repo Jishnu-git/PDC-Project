@@ -5,31 +5,6 @@
 #define MAX 1024
 
 using namespace std;
-/*
-neighbors = root
-
-for node in neighbor do
->>>>>>>>Parallel<<<<<<<<
-    if node is infected then
-        set solved = true
-        return
-    otherwise do
-        newNeighbors += neighbors of node
->>>>>>End Parallel<<<<<<
-    if solved then
-        display result
-        exit
-    otherwise do
-        accumulate newNeighbors
-        drop duplicates
-        neighbors = newNeighbors
-
-display result
-exit
-*/
-
-// __device__ bool *visited;
-// __device__ long long *d_Status;
 
 __global__
 void isInfected(long long *person, long long *solution, bool *visited, bool *status, long long n) {
@@ -41,12 +16,6 @@ void isInfected(long long *person, long long *solution, bool *visited, bool *sta
     }
 }
 
-// struct notVisited {
-//     __host__ __device__
-//     bool operator()(const long long id) {
-//         return !visited[id - 1];
-//     }
-// };
 
 int main(void) {
     readNames();
