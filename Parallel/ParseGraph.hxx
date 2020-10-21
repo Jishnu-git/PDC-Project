@@ -144,7 +144,7 @@ void readNames() {
         People.push_back(Person(stoll(row[0]), row[1], row[2], status));
         Status.push_back(status);
     }
-    cout << "\rReading Names.csv: " << row[0] << " entries processed...";
+    cout << "\rReading Names.csv: " << People.size() << " entries processed...";
     cout.flush();
     cout << "\nReading Names.csv: Done" << endl;
     names.close();

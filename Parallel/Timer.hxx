@@ -30,7 +30,7 @@ public:
             stopped = true;
             return result;
         }
-        result += (double) (steady_clock::now() - start).count() / 100000000;
+        result += (double) (steady_clock::now() - start).count() / 1000000000;
         stopped = true;
         return result;
     }
