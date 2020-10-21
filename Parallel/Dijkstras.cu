@@ -43,8 +43,17 @@ int main(void) {
     }
     neighbors.push_back(id);
 
-    Timer timer;
+    cout << "\nProcessing...";
+    Timer timer, op;
     while (!neighbors.empty() && *solution == -1) {
+        if (op.GetTime() >= 0.1) {
+            cout << "\rEntries Processed: " << count_if(visited, visited + People.size(), [](bool status) {
+                return status;
+            });
+            cout.flush();
+            op.Reset();
+        }
+
         long long *d_neighbors;
         cudaMalloc((void**)&d_neighbors, sizeof(long long) * neighbors.size());
         cudaMemcpy(d_neighbors, &neighbors[0], sizeof(long long) * neighbors.size(), cudaMemcpyHostToDevice);
@@ -53,6 +62,10 @@ int main(void) {
         cudaFree(d_neighbors);
         
         if (*solution != -1) {
+            cout << "\rEntries Processed: " << count_if(visited, visited + People.size(), [](bool status) {
+                return status;
+            }) 
+                 << "... Done" << endl;
             cout << "Closest Infected Person: \n" << People[*solution].info() << endl;
             break;
         }
@@ -69,10 +82,14 @@ int main(void) {
     double time = timer.Stop();
 
     if (*solution == -1) {
+        cout << "\rEntries Processed: " << count_if(visited, visited + People.size(), [](bool status) {
+            return status;
+        }) 
+             << "... Done" << endl;
         cout << "\nPerson has not come in contact with an infected person\n";
     }
 
-    cout << "\nTime Take: " << time << endl;
+    cout << "\nTime Taken: " << time << endl;
 
     cudaFree(solution);
     cudaFree(visited);
