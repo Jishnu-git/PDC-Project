@@ -1,7 +1,12 @@
 #include "ParseGraph.hxx"
 #include <bits/stdc++.h> 
+#include <omp.h>
+#include "../Parallel/Timer.hxx"
+
 using namespace std;
-void infected_bfs(int id, int n){
+
+int infected_bfs(int id, int n){
+	long count = 0;
 	vector<bool> visited;
 	visited.assign(n, false);
 	queue<int> que; 
@@ -11,11 +16,12 @@ void infected_bfs(int id, int n){
         int front = que.front(); 
         que.pop();
         cout << front << " in consideration"<<endl;
-        for (vector<long>::iterator i = Graph[front].begin(); i != Graph[front].end(); i++) {
+        for (vector<long long>::iterator i = Graph[front].begin(); i != Graph[front].end(); i++) {
         	if(visited[*i]==false){
+        		count+=1;
         		if(People[*i-1].isInfected()){
         			cout<<endl<<"Closest Infect Person is "<<People[*i-1].getFname()<<" "<<People[*i-1].getLname();
-        			return;
+        			return count;
 				}
 				else{
 					cout<<*i<<" ";
@@ -27,8 +33,10 @@ void infected_bfs(int id, int n){
     	cout<<endl;
     }
     cout<<"No infected person found"<<endl;
+    return count;
 }
-void infected_dfs(int id, int n){
+int infected_dfs(int id, int n){
+	long count = 0;
 	vector<bool> visited;
 	visited.assign(n, false);
 	stack<int> stack; 
@@ -38,11 +46,12 @@ void infected_dfs(int id, int n){
         int front = stack.top(); 
         stack.pop();
         cout << front << " in consideration"<<endl;
-        for (vector<long>::iterator i = Graph[front].begin(); i != Graph[front].end(); i++) {
+        for (vector<long long>::iterator i = Graph[front].begin(); i != Graph[front].end(); i++) {
         	if(visited[*i]==false){
+        		count += 1;
         		if(People[*i-1].isInfected()){
         			cout<<endl<<"Closest Infect Person is "<<People[*i-1].getFname()<<" "<<People[*i-1].getLname();
-        			return;
+        			return count;
 				}
 				else{
 					cout<<*i<<" ";
@@ -54,6 +63,7 @@ void infected_dfs(int id, int n){
     	cout<<endl;
     }
     cout<<"No infected person found"<<endl;
+    return count;
 }
 int main(void) {
     readNames();
@@ -64,10 +74,16 @@ int main(void) {
     cout<<"Select the search algorithm (DFS - 0, BFS - 1)";
     cin>>choice;
     if(choice==1){
-    	infected_bfs(id,Graph.size());
+    	Timer clock;
+    	long count = infected_bfs(id,Graph.size());
+    	double time = clock.GetTime();
+    	cout<<endl<<"Time Taken:\t"<<time<<"\t No. of Nodes Visited:\t"<<count;
 	}
     else{
-    	infected_dfs(id,Graph.size());
+    	Timer clock;
+    	long count = infected_dfs(id,Graph.size());
+    	double time = clock.Stop();
+    	cout<<endl<<"Time Taken:\t"<<time<<"\t No. of Nodes Visited:\t"<<count;
 	}
     return 0;
 }
